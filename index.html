@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bazar TESI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #E85D26;
+    --brand-dark: #C44A1A;
+    --brand-light: #FFF0E8;
+    --accent: #1A1A2E;
+    --gold: #F4A124;
+    --surface: #FAFAF8;
+    --white: #FFFFFF;
+    --gray-100: #F4F4F0;
+    --gray-200: #E8E8E2;
+    --gray-400: #A8A89C;
+    --gray-700: #4A4A40;
+    --gray-900: #1C1C18;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+    --shadow-sm: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-md: 0 6px 28px rgba(0,0,0,0.12);
+    --shadow-lg: 0 16px 56px rgba(0,0,0,0.18);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--surface);
+    color: var(--gray-900);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── WELCOME SCREEN ─── */
+  #welcome {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--accent);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  #welcome.exit {
+    opacity: 0; transform: scale(1.05);
+    pointer-events: none;
+  }
+  .welcome-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #2D1F5E 0%, #1A1A2E 60%, #0D0D1A 100%);
+  }
+  .welcome-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); animation: orb-float 6s ease-in-out infinite;
+  }
+  .orb1 { width: 400px; height: 400px; background: rgba(232,93,38,0.3); top: -10%; left: -10%; animation-delay: 0s; }
+  .orb2 { width: 300px; height: 300px; background: rgba(244,161,36,0.2); bottom: -5%; right: -5%; animation-delay: 2s; }
+  .orb3 { width: 200px; height: 200px; background: rgba(232,93,38,0.15); top: 60%; left: 30%; animation-delay: 4s; }
+  @keyframes orb-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -30px) scale(1.05); }
+  }
+  .welcome-content {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2rem;
+    animation: welcome-in 1s ease forwards;
+  }
+  @keyframes welcome-in {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .logo-mark {
+    width: 90px; height: 90px; border-radius: 24px;
+    background: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 2rem;
+    font-family: var(--font-display);
+    font-size: 2.2rem; font-weight: 800; color: white;
+    box-shadow: 0 0 0 12px rgba(232,93,38,0.2), 0 0 0 24px rgba(232,93,38,0.08);
+    animation: logo-pulse 3s ease-in-out infinite;
+  }
+  @keyframes logo-pulse {
+    0%, 100% { box-shadow: 0 0 0 12px rgba(232,93,38,0.2), 0 0 0 24px rgba(232,93,38,0.08); }
+    50% { box-shadow: 0 0 0 16px rgba(232,93,38,0.25), 0 0 0 32px rgba(232,93,38,0.1); }
+  }
+  .welcome-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    font-weight: 800; color: white;
+    letter-spacing: -0.02em; line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .welcome-title span { color: var(--brand); }
+  .welcome-subtitle {
+    font-size: 1.1rem; color: rgba(255,255,255,0.5);
+    font-weight: 300; margin-bottom: 2.5rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .welcome-tagline {
+    font-size: 1rem; color: rgba(255,255,255,0.6);
+    margin-bottom: 3rem; max-width: 320px; margin-inline: auto;
+  }
+  .btn-enter {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--brand); color: white;
+    font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+    padding: 1rem 2.5rem; border-radius: 100px; border: none; cursor: pointer;
+    box-shadow: 0 8px 32px rgba(232,93,38,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.02em;
+    animation: welcome-in 1s 0.4s ease both;
+  }
+  .btn-enter:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,93,38,0.6); }
+  .btn-enter svg { width: 20px; height: 20px; }
+  .welcome-dots {
+    display: flex; gap: 8px; justify-content: center;
+    margin-top: 3rem;
+    animation: welcome-in 1s 0.8s ease both;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .dot.active { background: var(--brand); width: 24px; border-radius: 3px; }
+
+  /* ─── APP SHELL ─── */
+  #app { display: none; min-height: 100vh; }
+  #app.visible { display: block; animation: app-in 0.6s ease; }
+  @keyframes app-in { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,248,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 1.5rem;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px; gap: 1rem;
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-size: 1.4rem; font-weight: 800;
+    color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+  .nav-links { display: flex; gap: 0.25rem; }
+  .nav-link {
+    font-size: 0.9rem; font-weight: 500; color: var(--gray-700);
+    padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+    cursor: pointer; border: none; background: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .nav-link.active { background: var(--brand-light); color: var(--brand); }
+  .nav-cta {
+    background: var(--brand); color: white; border: none;
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+    padding: 0.6rem 1.25rem; border-radius: 100px; cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--brand-dark); transform: translateY(-1px); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 2px; background: var(--gray-700); border-radius: 2px; transition: all 0.3s; }
+
+  /* ─── HERO / CATEGORIES ─── */
+  #home { padding: 0 1.5rem 3rem; }
+  .section-max { max-width: 1200px; margin: 0 auto; }
+  .hero {
+    text-align: center; padding: 3.5rem 1rem 2rem;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--brand-light); color: var(--brand);
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 100px;
+    margin-bottom: 1.25rem;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    font-weight: 800; line-height: 1.05; letter-spacing: -0.02em;
+    color: var(--gray-900); margin-bottom: 1rem;
+  }
+  .hero-title em { color: var(--brand); font-style: normal; }
+  .hero-desc { font-size: 1.05rem; color: var(--gray-400); max-width: 480px; margin: 0 auto 2rem; }
+  .hero-search {
+    display: flex; align-items: center; gap: 0; max-width: 420px; margin: 0 auto;
+    background: white; border: 1.5px solid var(--gray-200); border-radius: 100px;
+    padding: 0.35rem 0.35rem 0.35rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s;
+  }
+  .hero-search:focus-within { border-color: var(--brand); }
+  .hero-search input {
+    flex: 1; border: none; outline: none; font-family: var(--font-body);
+    font-size: 0.95rem; color: var(--gray-900); background: transparent;
+  }
+  .hero-search input::placeholder { color: var(--gray-400); }
+  .search-btn {
+    background: var(--brand); color: white; border: none; cursor: pointer;
+    padding: 0.55rem 1.25rem; border-radius: 100px; font-size: 0.9rem; font-weight: 600;
+    font-family: var(--font-body); transition: background 0.15s;
+  }
+  .search-btn:hover { background: var(--brand-dark); }
+
+  /* ─── CATEGORIES CAROUSEL ─── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+    color: var(--gray-900);
+  }
+  .see-all {
+    font-size: 0.9rem; color: var(--brand); font-weight: 600;
+    cursor: pointer; border: none; background: none;
+  }
+  .carousel-wrap { position: relative; margin: 0 -1.5rem; }
+  .carousel {
+    display: flex; gap: 1rem; padding: 0.5rem 1.5rem 1rem;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .carousel-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 36px; height: 36px; border-radius: 50%;
+    background: white; border: 1.5px solid var(--gray-200);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 2; box-shadow: var(--shadow-sm);
+    transition: background 0.15s;
+  }
+  .carousel-arrow:hover { background: var(--gray-100); }
+  .carousel-arrow.left { left: 0.5rem; }
+  .carousel-arrow.right { right: 0.5rem; }
+
+  /* ─── CATEGORY CARD ─── */
+  .cat-card {
+    flex: 0 0 180px; scroll-snap-align: start;
+    border-radius: var(--radius-lg); overflow: hidden;
+    cursor: pointer; position: relative;
+    aspect-ratio: 3/4; background: var(--gray-200);
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: var(--shadow-sm);
+  }
+  .cat-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: var(--shadow-md); }
+  .cat-card-img {
+    width: 100%; height: 65%; object-fit: cover;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+  }
+  .cat-card-body {
+    padding: 0.75rem; background: white;
+    height: 35%; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .cat-card-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; }
+  .cat-card-count { font-size: 0.75rem; color: var(--gray-400); }
+  .cat-card-btn {
+    background: var(--brand); color: white; border: none; cursor: pointer;
+    font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem;
+    border-radius: 100px; font-family: var(--font-body);
+    transition: background 0.15s;
+  }
+  .cat-card-btn:hover { background: var(--brand-dark); }
+
+  /* Category colors */
+  .cat-food { background: linear-gradient(160deg, #FFF3E0, #FFE0B2); }
+  .cat-tech { background: linear-gradient(160deg, #E3F2FD, #BBDEFB); }
+  .cat-cloth { background: linear-gradient(160deg, #FCE4EC, #F8BBD0); }
+  .cat-beauty { background: linear-gradient(160deg, #F3E5F5, #E1BEE7); }
+  .cat-craft { background: linear-gradient(160deg, #E8F5E9, #C8E6C9); }
+  .cat-digital { background: linear-gradient(160deg, #E8EAF6, #C5CAE9); }
+
+  /* ─── PRODUCTS GRID ─── */
+  #products { padding: 2rem 1.5rem 3rem; display: none; }
+  #products.visible { display: block; animation: slide-up 0.4s ease; }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.9rem; color: var(--gray-700); font-weight: 500;
+    border: none; background: none; cursor: pointer; margin-bottom: 1.5rem;
+    padding: 0.4rem 0; border-radius: 4px;
+  }
+  .back-btn:hover { color: var(--brand); }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .product-card {
+    background: white; border-radius: var(--radius-lg);
+    overflow: hidden; box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .product-imgs {
+    height: 220px; background: var(--gray-100);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative; overflow: hidden;
+  }
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--brand); color: white;
+    font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.7rem;
+    border-radius: 100px; letter-spacing: 0.03em;
+  }
+  .product-body { padding: 1.25rem; }
+  .product-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .product-desc { font-size: 0.85rem; color: var(--gray-400); margin-bottom: 0.75rem; line-height: 1.5; }
+  .product-price { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--brand); }
+  .product-divider { border: none; border-top: 1px solid var(--gray-200); margin: 1rem 0; }
+  .seller-mini {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .seller-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--brand-light); display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--brand);
+    flex-shrink: 0;
+  }
+  .seller-info { flex: 1; min-width: 0; }
+  .seller-name { font-size: 0.88rem; font-weight: 600; color: var(--gray-900); }
+  .seller-meta { font-size: 0.75rem; color: var(--gray-400); }
+  .wa-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #25D366; color: white; border: none; cursor: pointer;
+    font-size: 0.8rem; font-weight: 600; padding: 0.45rem 0.9rem;
+    border-radius: 100px; font-family: var(--font-body);
+    transition: background 0.15s; text-decoration: none; flex-shrink: 0;
+  }
+  .wa-btn:hover { background: #128C7E; }
+  .wa-btn svg { width: 15px; height: 15px; }
+
+  /* ─── REGISTER SECTION ─── */
+  #register { padding: 2rem 1.5rem 4rem; display: none; }
+  #register.visible { display: block; animation: slide-up 0.4s ease; }
+  .register-layout {
+    max-width: 760px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;
+  }
+  @media (max-width: 640px) {
+    .register-layout { grid-template-columns: 1fr; }
+  }
+  .register-info {
+    background: var(--accent); border-radius: var(--radius-lg);
+    padding: 2rem; color: white;
+  }
+  .register-info h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+  .register-info p { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 1.25rem; }
+  .register-steps { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .register-step { display: flex; align-items: flex-start; gap: 10px; }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+  }
+  .step-text { font-size: 0.83rem; color: rgba(255,255,255,0.7); line-height: 1.5; }
+  .register-form-wrap {
+    background: white; border-radius: var(--radius-lg);
+    padding: 2rem; box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+  }
+  .form-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; padding: 0.7rem 1rem;
+    border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 0.9rem; color: var(--gray-900);
+    background: white; outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--brand); }
+  .form-textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .file-drop {
+    border: 2px dashed var(--gray-200); border-radius: var(--radius-sm);
+    padding: 1.5rem; text-align: center; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .file-drop:hover { border-color: var(--brand); background: var(--brand-light); }
+  .file-drop input[type=file] { display: none; }
+  .file-drop-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .file-drop-label { font-size: 0.85rem; color: var(--gray-400); }
+  .file-drop-label strong { color: var(--brand); }
+  .form-hint { font-size: 0.78rem; color: var(--gray-400); margin-top: 0.3rem; }
+  .form-section-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--gray-400);
+    margin: 1.5rem 0 1rem; padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+  }
+  .submit-btn {
+    width: 100%; background: var(--brand); color: white; border: none; cursor: pointer;
+    font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+    padding: 1rem; border-radius: var(--radius-sm);
+    transition: background 0.15s, transform 0.15s;
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+  .success-msg {
+    background: #E8F5E9; border: 1.5px solid #A5D6A7; border-radius: var(--radius-sm);
+    padding: 1.25rem; display: none; text-align: center;
+  }
+  .success-msg.show { display: block; animation: slide-up 0.3s ease; }
+  .success-msg h4 { color: #2E7D32; font-family: var(--font-display); margin-bottom: 0.5rem; }
+  .success-msg p { color: #4CAF50; font-size: 0.88rem; }
+
+  /* ─── SELLER PROFILE ─── */
+  #seller-profile { padding: 2rem 1.5rem 4rem; display: none; }
+  #seller-profile.visible { display: block; animation: slide-up 0.4s ease; }
+  .profile-card {
+    max-width: 560px; margin: 0 auto;
+    background: white; border-radius: var(--radius-xl); overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .profile-header {
+    background: var(--accent); padding: 2.5rem 2rem 5rem; position: relative; text-align: center;
+  }
+  .profile-header::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 40px;
+    background: white;
+    border-radius: 50% 50% 0 0 / 30px 30px 0 0;
+  }
+  .profile-avatar-lg {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: var(--brand); margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: white;
+    border: 4px solid rgba(255,255,255,0.2);
+  }
+  .profile-header h2 { color: white; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; }
+  .profile-header p { color: rgba(255,255,255,0.6); font-size: 0.88rem; margin-top: 0.25rem; }
+  .profile-body { padding: 1.5rem 2rem 2rem; }
+  .profile-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; justify-content: center; }
+  .profile-tag {
+    background: var(--brand-light); color: var(--brand);
+    font-size: 0.8rem; font-weight: 600; padding: 0.35rem 0.8rem;
+    border-radius: 100px;
+  }
+  .profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .detail-item { background: var(--gray-100); border-radius: var(--radius-sm); padding: 0.75rem; }
+  .detail-label { font-size: 0.72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem; }
+  .detail-value { font-size: 0.95rem; font-weight: 600; color: var(--gray-900); }
+  .wa-btn-lg {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: #25D366; color: white; border: none; cursor: pointer;
+    font-size: 1rem; font-weight: 700; padding: 1rem;
+    border-radius: var(--radius-sm); font-family: var(--font-display);
+    transition: background 0.15s; text-decoration: none; width: 100%;
+  }
+  .wa-btn-lg:hover { background: #128C7E; }
+
+  /* ─── ADMIN PANEL ─── */
+  #admin { padding: 2rem 1.5rem 4rem; display: none; }
+  #admin.visible { display: block; animation: slide-up 0.4s ease; }
+  .admin-login {
+    max-width: 400px; margin: 2rem auto;
+    background: white; border-radius: var(--radius-lg);
+    padding: 2.5rem; box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200); text-align: center;
+  }
+  .admin-login h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .admin-login p { font-size: 0.88rem; color: var(--gray-400); margin-bottom: 2rem; }
+  .admin-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem; margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: white; border-radius: var(--radius-md);
+    padding: 1.5rem; border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-num { font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--brand); }
+  .stat-label { font-size: 0.85rem; color: var(--gray-400); margin-top: 0.25rem; }
+  .requests-list { display: flex; flex-direction: column; gap: 1rem; }
+  .request-item {
+    background: white; border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem; border: 1px solid var(--gray-200);
+    display: flex; align-items: center; gap: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .request-icon {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--gray-100);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .request-info { flex: 1; min-width: 0; }
+  .request-name { font-weight: 600; font-size: 0.95rem; }
+  .request-meta { font-size: 0.8rem; color: var(--gray-400); }
+  .request-status {
+    font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.75rem;
+    border-radius: 100px; letter-spacing: 0.04em;
+  }
+  .status-pending { background: #FFF9C4; color: #F9A825; }
+  .status-approved { background: #E8F5E9; color: #2E7D32; }
+  .status-rejected { background: #FFEBEE; color: #C62828; }
+  .request-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+  .action-btn {
+    padding: 0.4rem 0.9rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600;
+    border: none; cursor: pointer; font-family: var(--font-body); transition: opacity 0.15s;
+  }
+  .action-approve { background: #E8F5E9; color: #2E7D32; }
+  .action-reject { background: #FFEBEE; color: #C62828; }
+  .action-approve:hover, .action-reject:hover { opacity: 0.7; }
+  .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .admin-tab {
+    padding: 0.5rem 1.25rem; border-radius: 100px; font-size: 0.88rem; font-weight: 600;
+    border: 1.5px solid var(--gray-200); background: white; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .admin-tab.active { background: var(--brand); color: white; border-color: var(--brand); }
+  .admin-tab-content { display: none; }
+  .admin-tab-content.active { display: block; animation: slide-up 0.3s ease; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--accent); color: rgba(255,255,255,0.6);
+    padding: 2.5rem 1.5rem; text-align: center;
+  }
+  footer .logo-footer { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+  footer p { font-size: 0.85rem; margin-bottom: 0.5rem; }
+  footer a { color: var(--brand); text-decoration: none; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    background: var(--gray-900); color: white;
+    padding: 0.85rem 1.5rem; border-radius: var(--radius-sm);
+    font-size: 0.9rem; font-weight: 500;
+    transform: translateY(100px); opacity: 0;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+    box-shadow: var(--shadow-lg);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-title { font-size: 2rem; }
+    .cat-card { flex: 0 0 150px; }
+    .products-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .profile-details { grid-template-columns: 1fr; }
+    .admin-grid { grid-template-columns: 1fr 1fr; }
+    .request-item { flex-wrap: wrap; }
+    .carousel-arrow { display: none; }
+  }
+
+  /* ─── LOADING SKELETON ─── */
+  .skeleton {
+    background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+    background-size: 400% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 6px;
+  }
+  @keyframes skeleton-shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ WELCOME SCREEN ═══ -->
+<div id="welcome">
+  <div class="welcome-bg"></div>
+  <div class="orb1 welcome-orb"></div>
+  <div class="orb2 welcome-orb"></div>
+  <div class="orb3 welcome-orb"></div>
+  <div class="welcome-content">
+    <div class="logo-mark">B</div>
+    <h1 class="welcome-title">Bazar <span>TESI</span></h1>
+    <p class="welcome-subtitle">Mercado Estudiantil</p>
+    <p class="welcome-tagline">Descubre lo que tus compañeros ofrecen. Vende, compra y conecta.</p>
+    <button class="btn-enter" onclick="enterApp()">
+      Explorar el bazar
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </button>
+    <div class="welcome-dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#" onclick="showSection('home')">
+        <div class="nav-logo-dot"></div>Bazar TESI
+      </a>
+      <div class="nav-links">
+        <button class="nav-link active" onclick="showSection('home')">Inicio</button>
+        <button class="nav-link" onclick="showSection('products-all')">Productos</button>
+        <button class="nav-link" onclick="showSection('admin')">Admin</button>
+      </div>
+      <button class="nav-cta" onclick="showSection('register')">+ Vender aquí</button>
+      <button class="hamburger" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div id="home">
+    <div class="section-max">
+      <div class="hero">
+        <div class="hero-badge">🎓 Mercado escolar digital</div>
+        <h1 class="hero-title">Tu mercado estudiantil<br><em>siempre activo</em></h1>
+        <p class="hero-desc">Encuentra productos de tus compañeros, contacta vendedores y registra tu propio negocio.</p>
+        <div class="hero-search">
+          <input type="text" placeholder="Buscar productos, vendedores...">
+          <button class="search-btn">Buscar</button>
+        </div>
+      </div>
+
+      <!-- CATEGORIES -->
+      <div style="margin-top:2rem;">
+        <div class="section-header">
+          <h2 class="section-title">Categorías</h2>
+          <button class="see-all" onclick="showSection('products-all')">Ver todo</button>
+        </div>
+        <div class="carousel-wrap">
+          <button class="carousel-arrow left" onclick="scrollCarousel('categories-carousel', -250)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="carousel" id="categories-carousel">
+            <div class="cat-card" onclick="showCategory('Comida y Snacks')">
+              <div class="cat-card-img cat-food">🍕</div>
+              <div class="cat-card-body">
+                <div><div class="cat-card-name">Comida</div><div class="cat-card-count">12 vendedores</div></div>
+                <button class="cat-card-btn">Ver</button>
+              </div>
+            </div>
+            <div class="cat-card" onclick="showCategory('Tecnología')">
+              <div class="cat-card-img cat-tech">💻</div>
+              <div class="cat-card-body">
+                <div><div class="cat-card-name">Tecnología</div><div class="cat-card-count">7 vendedores</div></div>
+                <button class="cat-card-btn">Ver</button>
+              </div>
+            </div>
+            <div class="cat-card" onclick="showCategory('Ropa y Accesorios')">
+              <div class="cat-card-img cat-cloth">👗</div>
+              <div class="cat-card-body">
+                <div><div class="cat-card-name">Ropa</div><div class="cat-card-count">9 vendedores</div></div>
+                <button class="cat-card-btn">Ver</button>
+              </div>
+            </div>
+            <div class="cat-card" onclick="showCategory('Belleza y Cuidado')">
+              <div class="cat-card-img cat-beauty">💄</div>
+              <div class="cat-card-body">
+                <div><div class="cat-card-name">Belleza</div><div class="cat-card-count">5 vendedores</div></div>
+                <button class="cat-card-btn">Ver</button>
+              </div>
+            </div>
+            <div class="cat-card" onclick="showCategory('Artesanías')">
+              <div class="cat-card-img cat-craft">🎨</div>
+              <div class="cat-card-body">
+                <div><div class="cat-card-name">Artesanías</div><div class="cat-card-count">4 vendedores</div></div>
+                <button class="cat-card-btn">Ver</button>
+              </div>
+            </div>
+            <div class="cat-card" onclick="showCategory('Servicios Digitales')">
+              <div class="cat-card-img cat-digital">🖥️</div>
+              <div class="cat-card-body">
+                <div><div class="cat-card-name">Digital</div><div class="cat-card-count">6 vendedores</div></div>
+                <button class="cat-card-btn">Ver</button>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-arrow right" onclick="scrollCarousel('categories-carousel', 250)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- FEATURED PRODUCTS -->
+      <div style="margin-top:2.5rem;">
+        <div class="section-header">
+          <h2 class="section-title">Destacados</h2>
+          <button class="see-all" onclick="showSection('products-all')">Ver más</button>
+        </div>
+        <div id="featured-products" class="products-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS SECTION -->
+  <div id="products">
+    <div class="section-max">
+      <button class="back-btn" onclick="showSection('home')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        Volver
+      </button>
+      <div class="section-header">
+        <h2 class="section-title" id="products-section-title">Todos los productos</h2>
+      </div>
+      <div id="products-grid" class="products-grid"></div>
+    </div>
+  </div>
+
+  <!-- REGISTER SECTION -->
+  <div id="register">
+    <div class="section-max">
+      <button class="back-btn" onclick="showSection('home')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        Volver
+      </button>
+      <div style="margin-bottom:1.5rem;">
+        <h2 class="section-title">Registrarse como vendedor</h2>
+        <p style="color:var(--gray-400);font-size:0.9rem;margin-top:0.35rem;">Crea tu publicación y llega a todos tus compañeros</p>
+      </div>
+      <div class="register-layout">
+        <div class="register-info">
+          <h3>¿Cómo funciona?</h3>
+          <p>El proceso es sencillo y seguro. Tu publicación será revisada antes de aparecer en el bazar.</p>
+          <ul class="register-steps">
+            <li class="register-step"><div class="step-num">1</div><div class="step-text">Llena el formulario con tu información y la de tus productos</div></li>
+            <li class="register-step"><div class="step-num">2</div><div class="step-text">Sube tu credencial escolar para verificar tu identidad</div></li>
+            <li class="register-step"><div class="step-num">3</div><div class="step-text">Carga el comprobante de pago de tu registro</div></li>
+            <li class="register-step"><div class="step-num">4</div><div class="step-text">Espera la aprobación del administrador</div></li>
+            <li class="register-step"><div class="step-num">5</div><div class="step-text">¡Aparece en el bazar y empieza a vender!</div></li>
+          </ul>
+          <div style="margin-top:1.5rem;padding:1rem;background:rgba(255,255,255,0.08);border-radius:var(--radius-sm);">
+            <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin:0;">💳 Costo de registro: <strong style="color:white;">$50 MXN</strong> por publicación</p>
+          </div>
+        </div>
+
+        <div class="register-form-wrap">
+          <h3 class="form-title">Nueva publicación</h3>
+          <div id="success-msg" class="success-msg">
+            <h4>✅ ¡Solicitud enviada!</h4>
+            <p>Tu publicación está <strong>pendiente de aprobación</strong>. Te notificaremos por WhatsApp cuando sea revisada.</p>
+          </div>
+          <div id="register-form">
+            <div class="form-section-label">Información personal</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nombre completo *</label>
+                <input type="text" class="form-input" placeholder="Tu nombre">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Número de teléfono *</label>
+                <input type="tel" class="form-input" placeholder="10 dígitos">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Grupo *</label>
+                <input type="text" class="form-input" placeholder="Ej: 3°A">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Turno *</label>
+                <select class="form-select">
+                  <option value="">Selecciona</option>
+                  <option>Matutino</option>
+                  <option>Vespertino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Categoría *</label>
+              <select class="form-select">
+                <option value="">Selecciona una categoría</option>
+                <option>Comida y Snacks</option>
+                <option>Tecnología</option>
+                <option>Ropa y Accesorios</option>
+                <option>Belleza y Cuidado</option>
+                <option>Artesanías</option>
+                <option>Servicios Digitales</option>
+              </select>
+            </div>
+
+            <div class="form-section-label">Información del producto</div>
+            <div class="form-group">
+              <label class="form-label">Nombre del producto *</label>
+              <input type="text" class="form-input" placeholder="Nombre de tu producto o servicio">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Descripción *</label>
+              <textarea class="form-textarea" placeholder="Describe tu producto: ingredientes, materiales, características..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio (MXN) *</label>
+              <input type="number" class="form-input" placeholder="0.00">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fotos del producto</label>
+              <div class="file-drop" onclick="this.querySelector('input').click()">
+                <input type="file" accept="image/*" multiple>
+                <div class="file-drop-icon">📸</div>
+                <div class="file-drop-label"><strong>Selecciona fotos</strong> o arrástralas aquí<br>JPG, PNG — Máximo 5MB cada una</div>
+              </div>
+            </div>
+
+            <div class="form-section-label">Validación de identidad</div>
+            <div class="form-group">
+              <label class="form-label">Credencial escolar *</label>
+              <div class="file-drop" onclick="this.querySelector('input').click()">
+                <input type="file" accept="image/*,.pdf">
+                <div class="file-drop-icon">🪪</div>
+                <div class="file-drop-label"><strong>Sube tu credencial</strong><br>Ambos lados visibles — JPG, PNG o PDF</div>
+              </div>
+              <p class="form-hint">⚠️ Sin credencial, tu publicación no podrá aprobarse</p>
+            </div>
+
+            <div class="form-section-label">Comprobante de pago</div>
+            <div class="form-group">
+              <label class="form-label">Voucher de pago ($50 MXN) *</label>
+              <div class="file-drop" onclick="this.querySelector('input').click()">
+                <input type="file" accept="image/*,.pdf">
+                <div class="file-drop-icon">🧾</div>
+                <div class="file-drop-label"><strong>Sube tu comprobante</strong><br>Transferencia, CoDi o depósito</div>
+              </div>
+              <p class="form-hint">Depositar a: CLABE 012345678901234567 — TESIBazar</p>
+            </div>
+
+            <button class="submit-btn" onclick="submitForm()">Enviar solicitud →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELLER PROFILE -->
+  <div id="seller-profile">
+    <div class="section-max">
+      <button class="back-btn" id="profile-back-btn" onclick="goBackFromProfile()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        Volver
+      </button>
+      <div class="profile-card" id="profile-card-content"></div>
+    </div>
+  </div>
+
+ <div id="admin">
+  <div class="section-max">
+    
+    <div id="admin-login" class="admin-login">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">🔐</div>
+      <h2>Panel de administrador</h2>
+      <p>Ingresa las credenciales para acceder</p>
+      <div class="form-group" style="text-align:left;">
+        <label class="form-label">Usuario</label>
+        <input type="text" class="form-input" id="admin-user" placeholder="admin">
+      </div>
+      <div class="form-group" style="text-align:left;margin-top:0.75rem;">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-input" id="admin-pass" placeholder="••••••••">
+      </div>
+      <button class="submit-btn" style="margin-top:1.25rem;" onclick="adminLogin()">Ingresar →</button>
+    </div>
+
+    <div id="admin-content" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <h2 class="section-title">Panel de Administración</h2>
+        <button class="action-btn action-reject" style="background:#C62828; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer;" onclick="adminLogout()">Cerrar sesión</button>
+      </div>
+      
+      <div class="admin-grid">
+        <div class="stat-card"><div class="stat-num" id="stat-sellers-count">37</div><div class="stat-label">Vendedores activos</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-pending-count" style="color:var(--gold, #FFB300);">4</div><div class="stat-label">Pendientes de aprobación</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#2E7D32;">124</div><div class="stat-label">Productos publicados</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--accent, #1E88E5);">342</div><div class="stat-label">Visitas este mes</div></div>
+      </div>
+      
+      <div class="admin-tabs" style="display:flex; gap:0.5rem; margin-top:1.5rem; border-bottom:2px solid #ddd; padding-bottom:0.5rem;">
+        <button class="admin-tab active" onclick="switchAdminTab('tab-sellers', this)">Vendedores</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-payments', this)">Pagos</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-ids', this)">Credenciales</button>
+      </div>
+      
+      <div id="tab-sellers" class="admin-tab-content active">
+        <div class="requests-list" id="sellers-list"></div>
+      </div>
+      <div id="tab-payments" class="admin-tab-content">
+        <div class="requests-list" id="payments-list"></div>
+      </div>
+      <div id="tab-ids" class="admin-tab-content">
+        <div class="requests-list" id="ids-list"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="logo-footer">Bazar TESI</div>
+  <p>Mercado estudiantil digital — Tecnológico de Estudios Superiores de Ixtapaluca</p>
+  <p style="margin-top:0.5rem;">Desarrollado con ❤️ para la comunidad TESI · <a href="#">Contacto</a></p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+
+<style>
+  /* Control de las pestañas */
+  .admin-tab-content {
+    display: none;
+    padding-top: 1rem;
+  }
+  .admin-tab-content.active {
+    display: block;
+  }
+  .admin-tab {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+  }
+  .admin-tab.active {
+    background: #fff;
+    font-weight: bold;
+    border-bottom: 2px solid #fff;
+    margin-bottom: -2px;
+  }
+  /* Estilo básico del Toast si no lo tenías */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+  }
+</style>
+
+
+<script>
+// --- CONFIGURACIÓN DE CREDENCIALES ---
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "admin123"; 
+
+// --- DATOS SIMULADOS DE SOLICITUDES ---
+let solicitudesSellers = [
+  { id: 1, nombre: "Juan Pérez", carrera: "Sistemas", detalle: "Venta de accesorios de computación" },
+  { id: 2, nombre: "María G.", carrera: "Gestión", detalle: "Venta de postres y snacks" }
+];
+
+let solicitudesPayments = [
+  { id: 101, nombre: "Carlos T.", carrera: "Sistemas", detalle: "Comprobante de pago rifa estudiantil - $50" }
+];
+
+let solicitudesIds = [
+  { id: 201, nombre: "Ana López", carrera: "Electrónica", detalle: "Verificación de tira de materias / Credencial TESI" }
+];
+
+// --- FUNCIÓN DE INICIO DE SESIÓN ---
+function adminLogin() {
+  const userInput = document.getElementById("admin-user").value;
+  const passInput = document.getElementById("admin-pass").value;
+
+  if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
+    document.getElementById("admin-login").style.display = "none";
+    document.getElementById("admin-content").style.display = "block";
+    
+    // Cargar solicitudes e interacciones
+    renderAllRequests();
+    showToast("¡Bienvenido al Panel de Administración!", "success");
+  } else {
+    showToast("Credenciales incorrectas. Inténtalo de nuevo.", "error");
+  }
+}
+
+// --- FUNCIÓN DE CERRAR SESIÓN ---
+function adminLogout() {
+  document.getElementById("admin-user").value = "";
+  document.getElementById("admin-pass").value = "";
+  
+  document.getElementById("admin-login").style.display = "block";
+  document.getElementById("admin-content").style.display = "none";
+  
+  showToast("Sesión cerrada correctamente.", "info");
+}
+
+// --- CAMBIO DE PESTAÑAS (TABS) ---
+function switchAdminTab(tabId, button) {
+  const contents = document.querySelectorAll(".admin-tab-content");
+  contents.forEach(content => content.classList.remove("active"));
+  
+  const tabs = document.querySelectorAll(".admin-tab");
+  tabs.forEach(tab => tab.classList.remove("active"));
+  
+  document.getElementById(tabId).classList.add("active");
+  button.classList.add("active");
+}
+
+// --- RENDERIZAR LAS SOLICITUDES EN PANTALLA ---
+function renderRequests(listId, arrayData, type) {
+  const container = document.getElementById(listId);
+  container.innerHTML = ""; 
+
+  if (arrayData.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color: #888; padding: 1.5rem;">No hay solicitudes pendientes en esta sección.</p>`;
+    return;
+  }
+
+  arrayData.forEach(req => {
+    const card = document.createElement("div");
+    card.className = "request-card"; 
+    card.style = "background:#fff; border:1px solid #ddd; padding:1rem; border-radius:8px; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; text-align:left; box-shadow: 0 2px 4px rgba(0,0,0,0.05);";
+    
+    card.innerHTML = `
+      <div>
+        <strong style="font-size:1.1rem; color:#333;">${req.nombre}</strong> 
+        <span style="color:#B8860B; font-size:0.85rem; font-weight:bold;">(${req.carrera})</span>
+        <p style="margin:0.25rem 0 0 0; color:#555; font-size:0.95rem;">${req.detalle}</p>
+      </div>
+      <div style="display:flex; gap:0.5rem;">
+        <button style="background:#2E7D32; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-weight:bold;" onclick="procesarSolicitud(${req.id}, '${type}', 'aceptar')">Aceptar</button>
+        <button style="background:#C62828; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-weight:bold;" onclick="procesarSolicitud(${req.id}, '${type}', 'rechazar')">Rechazar</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Actualiza los contadores de la cuadrícula superior y pinta las listas
+function renderAllRequests() {
+  renderRequests("sellers-list", solicitudesSellers, "sellers");
+  renderRequests("payments-list", solicitudesPayments, "payments");
+  renderRequests("ids-list", solicitudesIds, "ids");
+
+  // Calcular total de pendientes dinámicamente
+  const totalPendientes = solicitudesSellers.length + solicitudesPayments.length + solicitudesIds.length;
+  document.getElementById("stat-pending-count").innerText = totalPendientes;
+}
+
+// --- ACCIÓN DE ACEPTAR O RECHAZAR ---
+function procesarSolicitud(id, type, accion) {
+  if (type === "sellers") {
+    if(accion === "aceptar") {
+      // Opcional: Podrías aumentar el contador de "Vendedores activos" de la interfaz
+      let activosNum = document.getElementById("stat-sellers-count");
+      activosNum.innerText = parseInt(activosNum.innerText) + 1;
+    }
+    solicitudesSellers = solicitudesSellers.filter(item => item.id !== id);
+  } else if (type === "payments") {
+    solicitudesPayments = solicitudesPayments.filter(item => item.id !== id);
+  } else if (type === "ids") {
+    solicitudesIds = solicitudesIds.filter(item => item.id !== id);
+  }
+
+  // Redibujar cambios
+  renderAllRequests();
+
+  // Feedback visual
+  if (accion === "aceptar") {
+    showToast(`Solicitud #${id} aprobada con éxito.`, "success");
+  } else {
+    showToast(`Solicitud #${id} rechazada.`, "error");
+  }
+}
+
+// --- FUNCIÓN DEL TOAST ---
+function showToast(message, type = "info") {
+  const toast = document.getElementById("toast");
+  toast.innerText = message;
+  
+  if (type === "success") toast.style.background = "#2E7D32";
+  else if (type === "error") toast.style.background = "#C62828";
+  else toast.style.background = "#333";
+  
+  toast.classList.add("show");
+  
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+</script>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const sellers = [
+  { id:1, name:'Ana García', group:'3°A', shift:'Matutino', category:'Comida y Snacks', phone:'5512345678', emoji:'🍕', initials:'AG', status:'approved' },
+  { id:2, name:'Carlos López', group:'2°B', shift:'Vespertino', category:'Tecnología', phone:'5598765432', emoji:'💻', initials:'CL', status:'approved' },
+  { id:3, name:'Sofía Ramírez', group:'1°C', shift:'Matutino', category:'Ropa y Accesorios', phone:'5567891234', emoji:'👗', initials:'SR', status:'approved' },
+  { id:4, name:'Miguel Torres', group:'3°D', shift:'Vespertino', category:'Artesanías', phone:'5543218765', emoji:'🎨', initials:'MT', status:'pending' },
+  { id:5, name:'Valeria Núñez', group:'2°A', shift:'Matutino', category:'Belleza y Cuidado', phone:'5534567890', emoji:'💄', initials:'VN', status:'approved' },
+];
+
+const products = [
+  { id:1, sellerId:1, name:'Pizza personal', desc:'Pizza casera con queso mozzarella, pepperoni y salsa de tomate artesanal. Pídela caliente.', price:55, emoji:'🍕', category:'Comida y Snacks', badge:'🔥 Popular' },
+  { id:2, sellerId:2, name:'Reparación de celular', desc:'Servicio de cambio de pantalla y batería. Garantía de 30 días. Sin cita previa.', price:350, emoji:'📱', category:'Tecnología', badge:null },
+  { id:3, sellerId:3, name:'Pulseras hechas a mano', desc:'Pulseras de macramé con colores personalizables. Diseños únicos para cada cliente.', price:40, emoji:'📿', category:'Ropa y Accesorios', badge:'✨ Nuevo' },
+  { id:4, sellerId:5, name:'Kit de uñas gel', desc:'Diseño de uñas gel con piedras decorativas. Duración de 3 semanas. Incluye primer capa.', price:120, emoji:'💅', category:'Belleza y Cuidado', badge:null },
+  { id:5, sellerId:1, name:'Tacos de guisado', desc:'3 tacos de guisado a elegir entre frijoles, chicharrón, rajas o nopales. Incluyen salsa.', price:30, emoji:'🌮', category:'Comida y Snacks', badge:'🏆 Best seller' },
+  { id:6, sellerId:2, name:'Clases de programación', desc:'Aprende Python o JavaScript desde cero. Sesiones de 1 hora, material incluido.', price:200, emoji:'👨‍💻', category:'Tecnología', badge:null },
+];
+
+let currentSection = 'home';
+let currentCategory = null;
+let profileBackSection = 'products';
+
+// ─── WELCOME ─────────────────────────────────────────────────────────────────
+function enterApp() {
+  const w = document.getElementById('welcome');
+  const a = document.getElementById('app');
+  w.classList.add('exit');
+  setTimeout(() => { w.style.display = 'none'; a.style.display = 'block'; a.classList.add('visible'); renderFeatured(); }, 800);
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function showSection(section) {
+  const sections = ['home','products','register','seller-profile','admin'];
+  sections.forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.classList.remove('visible');
+  });
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+  if (section === 'home') {
+    document.getElementById('home').scrollIntoView({behavior:'smooth'});
+    document.querySelectorAll('.nav-link')[0].classList.add('active');
+    currentSection = 'home';
+  } else if (section === 'products-all') {
+    document.getElementById('products').classList.add('visible');
+    document.getElementById('products-section-title').textContent = 'Todos los productos';
+    renderProducts(products);
+    currentSection = 'products';
+    document.querySelectorAll('.nav-link')[1]?.classList.add('active');
+    document.getElementById('products').scrollIntoView({behavior:'smooth'});
+  } else if (section === 'register') {
+    document.getElementById('register').classList.add('visible');
+    currentSection = 'register';
+    document.getElementById('register').scrollIntoView({behavior:'smooth'});
+  } else if (section === 'admin') {
+    document.getElementById('admin').classList.add('visible');
+    currentSection = 'admin';
+    document.querySelectorAll('.nav-link')[2]?.classList.add('active');
+    document.getElementById('admin').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+function showCategory(cat) {
+  currentCategory = cat;
+  const filtered = products.filter(p => p.category === cat);
+  document.getElementById('products').classList.add('visible');
+  document.getElementById('products-section-title').textContent = cat;
+  renderProducts(filtered);
+  currentSection = 'products';
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
+}
+
+function goBackFromProfile() {
+  document.getElementById('seller-profile').classList.remove('visible');
+  if (profileBackSection === 'home') {
+    document.getElementById('home').scrollIntoView({behavior:'smooth'});
+  } else {
+    document.getElementById('products').classList.add('visible');
+    document.getElementById('products').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+// ─── RENDER PRODUCTS ─────────────────────────────────────────────────────────
+function makeProductCard(p) {
+  const seller = sellers.find(s => s.id === p.sellerId);
+  return `
+    <div class="product-card">
+      <div class="product-imgs">
+        ${p.emoji}
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-price">$${p.price} MXN</div>
+        <hr class="product-divider">
+        <div class="seller-mini">
+          <div class="seller-avatar">${seller.initials}</div>
+          <div class="seller-info">
+            <div class="seller-name">${seller.name}</div>
+            <div class="seller-meta">${seller.group} · ${seller.shift}</div>
+          </div>
+          <a class="wa-btn" href="https://wa.me/52${seller.phone}?text=Hola%20${encodeURIComponent(seller.name)}%2C%20vi%20tu%20producto%20%22${encodeURIComponent(p.name)}%22%20en%20Bazar%20TESI" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+        <button style="width:100%;margin-top:0.75rem;background:var(--brand-light);color:var(--brand);border:none;border-radius:var(--radius-sm);padding:0.6rem;font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font-body);" onclick="showSellerProfile(${seller.id})">Ver perfil completo</button>
+      </div>
+    </div>`;
+}
+
+function renderFeatured() {
+  document.getElementById('featured-products').innerHTML = products.slice(0,3).map(makeProductCard).join('');
+}
+
+function renderProducts(list) {
+  const grid = document.getElementById('products-grid');
+  if (!list.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray-400);">No hay productos en esta categoría aún.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(makeProductCard).join('');
+}
+
+// ─── SELLER PROFILE ───────────────────────────────────────────────────────────
+function showSellerProfile(id) {
+  const seller = sellers.find(s => s.id === id);
+  if (!seller) return;
+  profileBackSection = currentSection;
+
+  const sellerProducts = products.filter(p => p.sellerId === id);
+
+  document.getElementById('profile-card-content').innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar-lg">${seller.initials}</div>
+      <h2>${seller.name}</h2>
+      <p>${seller.category}</p>
+    </div>
+    <div class="profile-body">
+      <div class="profile-tags">
+        <span class="profile-tag">${seller.group}</span>
+        <span class="profile-tag">${seller.shift}</span>
+        <span class="profile-tag">${seller.category}</span>
+        <span class="profile-tag" style="background:#E8F5E9;color:#2E7D32;">✅ Verificado</span>
+      </div>
+      <div class="profile-details">
+        <div class="detail-item"><div class="detail-label">Nombre</div><div class="detail-value">${seller.name}</div></div>
+        <div class="detail-item"><div class="detail-label">Grupo</div><div class="detail-value">${seller.group}</div></div>
+        <div class="detail-item"><div class="detail-label">Turno</div><div class="detail-value">${seller.shift}</div></div>
+        <div class="detail-item"><div class="detail-label">Categoría</div><div class="detail-value">${seller.category}</div></div>
+      </div>
+      ${sellerProducts.length ? `<div style="margin-bottom:1.25rem;"><div style="font-size:0.8rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">Productos</div>${sellerProducts.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:0.6rem;background:var(--gray-100);border-radius:var(--radius-sm);margin-bottom:0.5rem;"><span style="font-size:1.3rem;">${p.emoji}</span><div style="flex:1;"><div style="font-weight:600;font-size:0.88rem;">${p.name}</div><div style="font-size:0.78rem;color:var(--gray-400);">$${p.price} MXN</div></div></div>`).join('')}</div>` : ''}
+      <a class="wa-btn-lg" href="https://wa.me/52${seller.phone}?text=Hola%20${encodeURIComponent(seller.name)}%2C%20te%20contacto%20desde%20Bazar%20TESI%20para%20preguntar%20por%20tus%20productos." target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Contactar por WhatsApp
+      </a>
+    </div>
+  `;
+
+  document.querySelectorAll('#home, #products, #register, #admin').forEach(el => el.classList.remove('visible'));
+  document.getElementById('seller-profile').classList.add('visible');
+  document.getElementById('seller-profile').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── REGISTER FORM ────────────────────────────────────────────────────────────
+function submitForm() {
+  const inputs = document.querySelectorAll('#register-form .form-input, #register-form .form-select, #register-form .form-textarea');
+  let valid = true;
+  inputs.forEach(i => { if(i.required !== false && !i.value && i.type !== 'file') valid = false; });
+  // Basic demo: always accept
+  document.getElementById('register-form').style.opacity = '0.4';
+  document.getElementById('register-form').style.pointerEvents = 'none';
+  setTimeout(() => {
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('success-msg').classList.add('show');
+  }, 800);
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+const pendingRequests = [
+  { name:'Miguel Torres', meta:'3°D · Vespertino · Artesanías', emoji:'🎨', type:'seller', status:'pending' },
+  { name:'Luisa Martínez', meta:'2°C · Matutino · Comida y Snacks', emoji:'🍜', type:'seller', status:'pending' },
+  { name:'José Hernández', meta:'1°B · Vespertino · Tecnología', emoji:'🔧', type:'seller', status:'pending' },
+];
+
+function adminLogin() {
+  const u = document.getElementById('admin-user').value;
+  const p = document.getElementById('admin-pass').value;
+  if (u === 'admin' && p === 'tesi2024') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-content').style.display = 'block';
+    renderAdminLists();
+  } else {
+    showToast('❌ Credenciales incorrectas');
+  }
+}
+
+function adminLogout() {
+  document.getElementById('admin-login').style.display = 'block';
+  document.getElementById('admin-content').style.display = 'none';
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
+}
+
+function renderAdminLists() {
+  ['sellers-list','payments-list','ids-list'].forEach(id => {
+    document.getElementById(id).innerHTML = pendingRequests.map((r,i) => `
+      <div class="request-item" id="req-${id}-${i}">
+        <div class="request-icon">${r.emoji}</div>
+        <div class="request-info">
+          <div class="request-name">${r.name}</div>
+          <div class="request-meta">${r.meta}</div>
+        </div>
+        <span class="request-status status-pending">Pendiente</span>
+        <div class="request-actions">
+          <button class="action-btn action-approve" onclick="approveRequest('${id}',${i})">✓ Aprobar</button>
+          <button class="action-btn action-reject" onclick="rejectRequest('${id}',${i})">✗ Rechazar</button>
+        </div>
+      </div>`).join('');
+  });
+}
+
+function approveRequest(listId, idx) {
+  const el = document.getElementById(`req-${listId}-${idx}`);
+  el.querySelector('.request-status').className = 'request-status status-approved';
+  el.querySelector('.request-status').textContent = 'Aprobado';
+  el.querySelectorAll('.action-btn').forEach(b => b.remove());
+  showToast('✅ Publicación aprobada');
+}
+
+function rejectRequest(listId, idx) {
+  const el = document.getElementById(`req-${listId}-${idx}`);
+  el.querySelector('.request-status').className = 'request-status status-rejected';
+  el.querySelector('.request-status').textContent = 'Rechazado';
+  el.querySelectorAll('.action-btn').forEach(b => b.remove());
+  showToast('❌ Publicación rechazada');
+}
+
+function switchAdminTab(tabId, btn) {
+  document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── CAROUSEL ─────────────────────────────────────────────────────────────────
+function scrollCarousel(id, amount) {
+  document.getElementById(id).scrollBy({left: amount, behavior:'smooth'});
+}
+
+// ─── MOBILE MENU ──────────────────────────────────────────────────────────────
+function toggleMobileMenu() {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = '';
+  } else {
+    links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:white;padding:1rem;border-bottom:1px solid var(--gray-200);z-index:99;gap:0.25rem;';
+  }
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// File drop visual feedback
+document.querySelectorAll('.file-drop input[type=file]').forEach(input => {
+  input.addEventListener('change', function() {
+    const drop = this.closest('.file-drop');
+    if (this.files.length) {
+      drop.style.borderColor = '#2E7D32';
+      drop.style.background = '#E8F5E9';
+      drop.querySelector('.file-drop-icon').textContent = '✅';
+      drop.querySelector('.file-drop-label').innerHTML = `<strong>${this.files.length} archivo(s) seleccionado(s)</strong>`;
+    }
+  });
+});
+</script>
+</body>
+</html>
